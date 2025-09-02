@@ -8,7 +8,7 @@ import { Profile } from './profile/Profile.jsx';
 import { SettingsRouting } from './settings/index.jsx';
 import { DesktopHeader } from '../components/header/DesktopHeader.jsx';
 import { MobileFooter } from '../components/footer/MobileFooter.jsx';
-import {Tenants } from "./tenants/tenant-requests/Tenants.jsx";
+import { Tenants } from "./tenants/tenant-requests/Tenants.jsx";
 
 const Redirect = ({ to }) => {
   const params = useParams();

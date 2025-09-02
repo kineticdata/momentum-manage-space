@@ -102,8 +102,10 @@ export const Tenants = () => {
                     <TenantsList
                         listData={{
                             initialized,
-                            tenantLoading,
-                            data: mergeTenantResponses(response?.submissions, tenantResponse?.spaces),
+                            loading: tenantLoading,
+                            data: tenantResponse
+                                ? mergeTenantResponses(response?.submissions, tenantResponse?.spaces)
+                                : undefined,
                             error: response?.error,
                             pageNumber,
                         }}
