@@ -54,7 +54,11 @@ export const appActions = regRedux(
         state.error = error;
       } else {
         state.space = space;
-        state.kappSlug = getAttributeValue(space, 'Catalog', 'catalog');
+        state.kappSlug = getAttributeValue(
+          space,
+          'Service Portal Kapp Slug',
+          'catalog',
+        );
       }
     },
     setKapp(state, { error, kapp }) {

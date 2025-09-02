@@ -9,14 +9,10 @@ import { Error } from '../../../components/states/Error.jsx';
 import { Loading } from '../../../components/states/Loading.jsx';
 import { Button } from '../../../atoms/Button.jsx';
 
-export const TenantsList = ({
-                              listData,
-                              listActions,
-                            }) => {
+export const TenantsList = ({ listData, listActions }) => {
   const mobile = useSelector(state => state.view.mobile);
 
   const { initialized, error, loading, data, pageNumber } = listData;
-
   const { nextPage, previousPage, reloadPage } = listActions;
 
   return (
