@@ -23,7 +23,7 @@ const useBackgroundGradient = mobile => {
   const matchesProfile = useMatch('/profile');
   const matchesForm = useMatch('/forms/:kappSlug/*');
   const matchesForm2 = useMatch('/kapps/:kappSlug/forms/:kappSlug/*');
-  const matchesForm3 = useMatch('/requests/:id/:formMode');
+  const matchesForm3 = useMatch('/tenant-requests/:id/:formMode');
   const className = 'bg-gradient-to-b from-transparent from-85% to-primary-300';
 
   // Only add gradient to home and profile pages for mobile

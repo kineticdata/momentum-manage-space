@@ -26,6 +26,9 @@ export const DesktopHeader = () => {
         <Button variant="tertiary" to="requests">
           Tickets
         </Button>
+        <Button variant="tertiary" to="tenants">
+          Tenants
+        </Button>
         <div className="mx-auto" />
         {!matchesHome && (
           <>

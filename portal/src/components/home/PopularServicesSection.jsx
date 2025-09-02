@@ -22,7 +22,7 @@ export const PopularServicesSection = () => {
     [kappSlug],
   );
 
-  // Retrieve the popular requests when the panel opens
+  // Retrieve the popular tenant-requests when the panel opens
   const { initialized, loading, response } = useData(fetchCategory, params);
   const popularForms = response?.category?.categorizations?.map(c => c?.form);
 

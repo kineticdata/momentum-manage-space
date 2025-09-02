@@ -8,6 +8,7 @@ import { Profile } from './profile/Profile.jsx';
 import { SettingsRouting } from './settings/index.jsx';
 import { DesktopHeader } from '../components/header/DesktopHeader.jsx';
 import { MobileFooter } from '../components/footer/MobileFooter.jsx';
+import {Tenants } from "./tenants/tenant-requests/Tenants.jsx";
 
 const Redirect = ({ to }) => {
   const params = useParams();
@@ -47,6 +48,7 @@ export const PrivateRoutes = () => {
         {/* Portal routes */}
         <Route path="/actions/*" element={<Actions />} />
         <Route path="/requests/*" element={<Requests />} />
+        <Route path="/tenants/*" element={<Tenants />} />
         <Route path="/forms/:formSlug/:submissionId?" element={<Form />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/settings/*" element={<SettingsRouting />} />

@@ -15,7 +15,7 @@
     "@jridgewell/gen-mapping" "^0.3.5"
     "@jridgewell/trace-mapping" "^0.3.24"
 
-"@ark-ui/react@4.9.2":
+"@ark-ui/react@^4.9.2":
   version "4.9.2"
   resolved "https://registry.yarnpkg.com/@ark-ui/react/-/react-4.9.2.tgz#e5ed903586101eb55d777ba7ad7dd05128ae68b0"
   integrity sha512-LJnz8nwXgGRszlkU2AiH3yLsAeXiXeQl4JBjMA7d8klZJBiBUp7URwLhBSWmoAIWRH7bW6fSPjhRAEkJLmD8gA==

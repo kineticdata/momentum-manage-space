@@ -7,7 +7,7 @@ export const MobileFooter = props => {
   // Are we on request details or form pages
   const matchesActions = useMatch('/actions/:id/*');
   // Are we on action details or form pages
-  const matchesRequests = useMatch('/requests/:id/*');
+  const matchesRequests = useMatch('/tenant-requests/:id/*');
   // Are we on a form page
   const matchesForm = useMatch('/forms/:formSlug/*');
   const matchesForm2 = useMatch('/kapps/:kappSlug/forms/:formSlug/*');

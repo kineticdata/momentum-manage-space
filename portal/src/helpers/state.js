@@ -48,15 +48,18 @@ export const appActions = regRedux(
       state.authenticated = payload;
     },
     setSpace(state, { error, space }) {
-      if (error) state.error = error;
-      else {
-        state.space = space;
-        state.kappSlug = getAttributeValue(
-          space,
-          'Service Portal Kapp Slug',
-          'service-portal',
-        );
-      }
+        if (error?.statusCode === 401) {
+            state.space = {};
+        } else if (error){
+            state.error = error;
+        } else {
+            state.space = space;
+            state.kappSlug = getAttributeValue(
+                space,
+                'Catalog',
+                'catalog',
+            );
+        }
     },
     setKapp(state, { error, kapp }) {
       if (error) state.error = state.error || error;
