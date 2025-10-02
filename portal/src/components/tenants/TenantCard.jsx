@@ -152,7 +152,6 @@ export const TenantCard = ({ submission, setTenantList }) => {
             <div className="text-gray-900">
               {submission.submission?.values['Company Name']}
             </div>
-            {/*<div className="text-gray-900">{submission.submission?.values['Environment Type']}</div>*/}
           </>
         )}
         <div className="max-md:ml-auto flex gap-2 items-center">

@@ -144,8 +144,7 @@ export const Tenants = () => {
     if (!tenantForm) {
       return;
     }
-
-    // Assuming your JSON is stored in a variable called formJson
+    
     let environmentValues = [];
 
     for (const page of tenantForm.form.pages) {
