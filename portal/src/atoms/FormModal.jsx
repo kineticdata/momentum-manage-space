@@ -7,6 +7,8 @@ import { KineticForm } from '../components/kinetic-form/KineticForm.jsx';
  * FormModal wraps a modal with a description slot and a Kinetic form.
  *
  * @param {Object} props
+ * @param {string} [props.formSlug] the form to display.
+ * @param {string} [props.kappSlug] the kapp the form is in.
  * @param {boolean} [props.open] Whether the modal is open.
  * @param {Function} [props.onOpenChange] Callback for when open state changes.
  * @param {Function} [props.onSubmit] Callback for when the form is submitted.
@@ -14,6 +16,8 @@ import { KineticForm } from '../components/kinetic-form/KineticForm.jsx';
  * @param {JSX.Element|JSX.Element[]} [props.children] Slot content for modal sections.
  */
 export const FormModal = ({
+  kappSlug,
+  formSlug,
   open,
   onOpenChange,
   onSubmit,
@@ -41,8 +45,8 @@ export const FormModal = ({
       <div slot="description">{slots.description}</div>
       <div slot="body">
         <KineticForm
-          kappSlug="catalog"
-          formSlug="tenant-decommission"
+          kappSlug={kappSlug}
+          formSlug={formSlug}
           completed={onSubmit}
         />
       </div>

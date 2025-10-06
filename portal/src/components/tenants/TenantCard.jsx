@@ -2,13 +2,13 @@ import clsx from 'clsx';
 import { Link, useLocation } from 'react-router-dom';
 import { Icon } from '../../atoms/Icon.jsx';
 import { StatusPill } from '../tickets/StatusPill.jsx';
-import {callIfFn, timeAgo} from '../../helpers/index.js';
+import { callIfFn, timeAgo } from '../../helpers/index.js';
 import { useSelector } from 'react-redux';
 import { Button } from '../../atoms/Button.jsx';
 import useSwipe from '../../helpers/hooks/useSwipe.js';
 import { FormModal } from '../../atoms/FormModal.jsx';
 import { useState } from 'react';
-import {toastSuccess} from "../../helpers/toasts.js";
+import { toastSuccess } from '../../helpers/toasts.js';
 
 const getMetaData = tenantSubmission => {
   if (['Datastore'].includes(tenantSubmission.type)) {
@@ -79,7 +79,9 @@ export const TenantCard = ({ submission, setTenantList }) => {
     toastSuccess({ title: 'Successfully decommissioned' });
 
     setTenantList(prevList =>
-        prevList.filter(tenantSubmission => tenantSubmission.id !== submission.id)
+      prevList.filter(
+        tenantSubmission => tenantSubmission.id !== submission.id,
+      ),
     );
   };
 
@@ -176,6 +178,8 @@ export const TenantCard = ({ submission, setTenantList }) => {
         </div>
       </div>
       <FormModal
+        formSlug={'tenant-decommission'}
+        kappSlug={'catalog'}
         open={openModal}
         onOpenChange={({ open }) => setOpenModal(open)}
         onSubmit={onModalSubmit}
