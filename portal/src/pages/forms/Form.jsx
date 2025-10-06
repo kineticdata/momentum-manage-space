@@ -55,7 +55,7 @@ const generateDeleteDraftButton =
     );
   };
 
-export const Form = ({ review, listActions }) => {
+export const Form = ({ review, listActions, requestPath }) => {
   const mobile = useSelector(state => state.view.mobile);
   const { kappSlug, formSlug, submissionId } = useParams();
   const portalKappSlug = useSelector(state => state.app.kappSlug);
@@ -66,7 +66,7 @@ export const Form = ({ review, listActions }) => {
   // since the UI doesn't have any other way out of this page on mobile.
   const backTo =
     location.state?.backPath ||
-    (submissionId ? '/requests' : mobile ? '/' : null);
+    (submissionId ? `/${requestPath}` : mobile ? '/' : null);
 
   const DeleteDraftButton = useMemo(
     () => generateDeleteDraftButton({ listActions }),
@@ -82,7 +82,7 @@ export const Form = ({ review, listActions }) => {
     response => {
       // Redirect if there is no confirmation page to render.
       if (response.submission?.displayedPage?.type !== 'confirmation') {
-        navigate(`/requests/${response.submission.id}`);
+        navigate(`/${requestPath}/${response.submission.id}`);
       }
     },
     [navigate],

@@ -1,19 +1,16 @@
 import { useSelector } from 'react-redux';
 import clsx from 'clsx';
-import { TicketsTabs } from '../../../components/tickets/TicketsTabs.jsx';
-import {
-  EmptyCard,
-  TicketCard,
-} from '../../../components/tickets/TicketCard.jsx';
+import { EmptyCard } from '../../../components/tickets/TicketCard.jsx';
 import { Error } from '../../../components/states/Error.jsx';
 import { Loading } from '../../../components/states/Loading.jsx';
 import { Button } from '../../../atoms/Button.jsx';
+import { TenantFilters } from '../../../components/tenants/TenantFilters.jsx';
+import { TenantCard } from '../../../components/tenants/TenantCard.jsx';
 
-export const TenantsList = ({ listData, listActions }) => {
+export const TenantsList = ({ listData, listActions, filters, setFilters, setTenantList }) => {
   const mobile = useSelector(state => state.view.mobile);
-
   const { initialized, error, loading, data, pageNumber } = listData;
-  const { nextPage, previousPage, reloadPage } = listActions;
+  const { nextPage, previousPage } = listActions;
 
   return (
     <>
@@ -24,7 +21,13 @@ export const TenantsList = ({ listData, listActions }) => {
           // Non mobile styles
           'md:my-6 md:items-center',
         )}
-      ></div>
+      >
+        <TenantFilters
+          type="tenants"
+          filters={filters}
+          setFilters={setFilters}
+        ></TenantFilters>
+      </div>
 
       {initialized && (
         <>
@@ -54,11 +57,11 @@ export const TenantsList = ({ listData, listActions }) => {
 
               {/* List of data */}
               {data?.length > 0 &&
-                data.map(submission => (
-                  <TicketCard
-                    key={submission.id}
-                    submission={submission}
-                    reload={reloadPage}
+                  data.map(listItem => (
+                  <TenantCard
+                    key={listItem.id}
+                    submission={listItem}
+                    setTenantList={setTenantList}
                   />
                 ))}
 

@@ -1,20 +1,35 @@
-import { useMemo, useState } from 'react';
+import { useMemo, useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { Route, Routes } from 'react-router-dom';
-import { defineKqlQuery, searchSubmissions } from '@kineticdata/react';
+import {
+  defineKqlQuery,
+  searchSubmissions,
+  fetchForm,
+} from '@kineticdata/react';
 import { TenantsList } from './TenantsList.jsx';
-import { TenantDetail } from './TenantDetail.jsx';
+import { RequestDetail } from '../../tickets/requests/RequestDetail.jsx';
 import { Form } from '../../forms/Form.jsx';
 import { usePaginatedData } from '../../../helpers/hooks/usePaginatedData.js';
 import { executeIntegration } from '../../../helpers/api.js';
 import { useData } from '../../../helpers/hooks/useData.js';
 
-const buildTenantsSearch = (profile, filters) => {
+const buildTenantsSearch = filters => {
   // Start query builder
   const search = defineKqlQuery();
+  search.equals('values[Status]', 'status');
+  search.equals('values[Environment Type]', 'environmentType');
+  search.equals('values[Company Name]', 'companyName');
+  search.equals('values[Space Slug]', 'spaceSlug');
 
+  // End query builder
+  search.end();
   return {
-    q: '',
+    q: search.end()({
+      status: filters.status.decommissioned ? 'Decommissioned' : 'Active',
+      environmentType: filters.search.environmentType || undefined,
+      companyName: filters.search.companyName || undefined,
+      spaceSlug: filters.search.spaceSlug || undefined,
+    }),
     sortOrder: 'createdAt',
     direction: 'asc',
     include: ['details', 'values', 'form', 'form.attributesMap'],
@@ -24,36 +39,47 @@ const buildTenantsSearch = (profile, filters) => {
 
 export const Tenants = () => {
   const { profile, kappSlug } = useSelector(state => state.app);
-
-  // State for filters
+  const [mergedTenantData, setMergedTenantData] = useState([]);
   const [filters, setFilters] = useState({
-    status: { draft: false, open: false, closed: false },
+    environmentTypes: [],
+    status: { decommissioned: false },
+    search: { companyName: '', environmentType: '', spaceSlug: '' },
   });
 
-  // Parameters for the query (if null, the query will not run)
-  const params = useMemo(
+  const getFormParams = useMemo(
+    () =>
+      kappSlug
+        ? {
+            formSlug: 'tenant',
+            kappSlug,
+            include: 'pages',
+          }
+        : null,
+    [kappSlug],
+  );
+  const {
+    response: tenantForm,
+  } = useData(fetchForm, getFormParams);
+
+  const submissionSearchParams = useMemo(
     () => ({
       kapp: kappSlug,
       form: 'tenant',
-      search: buildTenantsSearch(profile, filters),
+      search: buildTenantsSearch(filters),
     }),
     [kappSlug, profile, filters],
   );
 
   // Retrieve the data for the tenant list
   const { initialized, loading, response, pageNumber, actions } =
-    usePaginatedData(searchSubmissions, params);
+    usePaginatedData(searchSubmissions, submissionSearchParams);
 
-  // Parameters for the query (if null, the query will not run)
   const getTenantsParams = useMemo(
-    () =>
-      open
-        ? {
-            kappSlug,
-            integrationName: 'get-tenants',
-            parameters: {},
-          }
-        : null,
+    () => ({
+      kappSlug,
+      integrationName: 'get-tenants',
+      parameters: {},
+    }),
     [kappSlug],
   );
 
@@ -63,43 +89,89 @@ export const Tenants = () => {
   );
 
   const mergeTenantResponses = (submissions = [], tenantData = []) => {
-    // Submission with Tenant info
-    const mergedSubmissionTenants = submissions.map(submission => {
+    // Mere submissions with tenant data
+    const merged = submissions.map(submission => {
       const spaceSlug = submission.values['Space Slug'];
       const tenant = tenantData.find(t => t.slug === spaceSlug);
 
-      return tenant
-        ? Object.assign({}, submission, {
-            label: tenant.name,
-            coreState: tenant.status,
-          })
-        : submission;
+      return {
+        id: submission.id,
+        label: tenant?.name || submission.label,
+        coreState: tenant?.status || submission.coreState,
+        createdAt: submission.createdAt,
+        submittedAt: submission.submittedAt,
+        type: submission.type || 'Datastore',
+        tenant: tenant || null,
+        submission,
+      };
     });
 
     // List of Tenants without submissions
-    const tenants = tenantData.filter(
+    const tenantsWithoutSubmissions = tenantData.filter(
       t => !submissions.some(s => s.values['Space Slug'] === t.slug),
     );
 
-    // Generate submission for tenants
-    const generatedTenantSubmissions = tenants.map(tenant => ({
-      id: tenant.slug,
-      label: tenant.name,
-      values: {
-        'Space Slug': tenant.slug,
-      },
-      createdAt: tenant.createdAt,
-      submittedAt: tenant.createdAt,
-      type: 'Datastore',
-    }));
+    // Create a submission object for each tenant without a submission. Only do this on the first page.
+    // This ensures that we dont break of pagination.
+    const missingTenantSubmissions =
+      pageNumber === 1 && filters.status.decommissioned === false && filters.search.companyName === '' && filters.search.environmentType === '' && filters.search.spaceSlug === ''
+        ? tenantsWithoutSubmissions.map(tenant => ({
+            id: tenant.slug,
+            label: tenant.name,
+            coreState: tenant.status,
+            createdAt: tenant.createdAt,
+            submittedAt: tenant.createdAt,
+            type: 'Datastore',
+            tenant,
+            submission: null,
+          }))
+        : [];
 
-    return [...mergedSubmissionTenants, ...generatedTenantSubmissions];
+    return [...missingTenantSubmissions, ...merged];
   };
+
+  useEffect(() => {
+    if (!response?.submissions || !tenantResponse?.spaces) {
+      return;
+    }
+
+    setMergedTenantData(
+      mergeTenantResponses(response.submissions, tenantResponse.spaces),
+    );
+  }, [response, tenantResponse]);
+
+  useEffect(() => {
+    if (!tenantForm) {
+      return;
+    }
+    
+    let environmentValues = [];
+
+    for (const page of tenantForm.form.pages) {
+      for (const element of page.elements) {
+        if (element.elements) {
+          for (const subElement of element.elements) {
+            if (subElement.name === "Environment Type" && subElement.choices) {
+              environmentValues = subElement.choices.map(c => c.value);
+            }
+          }
+        }
+      }
+    }
+
+    setFilters(prev => ({
+      ...prev,
+      environmentTypes: environmentValues,
+    }));
+  }, [tenantForm]);
 
   return (
     <Routes>
-      <Route path=":submissionId" element={<TenantDetail />} />
-      <Route path=":submissionId/review" element={<Form review={true} />} />
+      <Route path=":submissionId" element={<RequestDetail />} />
+      <Route
+        path=":submissionId/review"
+        element={<Form review={false} requestPath="tenants" />}
+      />
       <Route
         path="*"
         element={
@@ -107,15 +179,11 @@ export const Tenants = () => {
             listData={{
               initialized,
               loading: tenantLoading,
-              data: tenantResponse
-                ? mergeTenantResponses(
-                    response?.submissions,
-                    tenantResponse?.spaces,
-                  )
-                : undefined,
+              data: mergedTenantData,
               error: response?.error,
               pageNumber,
             }}
+            setTenantList={setMergedTenantData}
             listActions={actions}
             filters={filters}
             setFilters={setFilters}

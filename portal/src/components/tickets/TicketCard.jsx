@@ -12,7 +12,7 @@ import { toastError, toastSuccess } from '../../helpers/toasts.js';
 import useSwipe from '../../helpers/hooks/useSwipe.js';
 
 const getMetaData = submission => {
-  if (['Approval', 'Task', 'Datastore'].includes(submission.type)) {
+  if (['Approval', 'Task'].includes(submission.type)) {
     switch (submission.coreState) {
       case 'Submitted':
       case 'Closed':

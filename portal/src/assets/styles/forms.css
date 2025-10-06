@@ -54,6 +54,27 @@
       @apply md:rounded-br-md;
     }
 
+    select {
+      @apply block appearance-none bg-no-repeat pr-11 md:pr-12 px-5 md:px-6 py-2.75 md:py-2.25 max-md:text-sm border rounded-2.5xl outline-0 w-full font-medium;
+      @apply text-gray-950 bg-white border-primary-400;
+      @apply hover:bg-primary-100;
+      @apply focus-visible:bg-white focus-visible:ring-3 focus-visible:ring-secondary-400;
+      @apply disabled:text-gray-900 disabled:bg-gray-100;
+      background-image: url(./icons/chevron-down.svg);
+      background-position: right 1.25rem center;
+      @media (min-width: 768px) {
+        background-position: right 1.5rem center;
+      }
+      background-size: 1.5rem;
+      &:disabled {
+        background-image: url(./icons/chevron-down_disabled.svg);
+      }
+
+      option[value=""] {
+        @apply text-gray-900;
+      }
+    }
+
     label:has(> input[type='checkbox']),
     label:has(> input[type='radio']) {
       @apply flex-none inline-flex flex-row-reverse justify-between items-center gap-3 px-5 md:px-6 py-2.75 md:py-2.25 max-md:text-sm border rounded-2.5xl outline-0 font-medium max-w-full;

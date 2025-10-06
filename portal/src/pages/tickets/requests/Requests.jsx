@@ -69,7 +69,7 @@ export const Requests = () => {
         path=":submissionId/edit"
         element={<Form listActions={actions} />}
       />
-      <Route path=":submissionId/review" element={<Form review={true} />} />
+      <Route path=":submissionId/review" element={<Form review={true} requestPath="requests" />} />
       <Route
         path="*"
         element={
