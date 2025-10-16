@@ -47,6 +47,7 @@ const getMenuItems = profile =>
         { label: 'Submit a Request', onClick: () => openSearch() },
         { label: 'Check Status', to: '/requests' },
         { label: 'My Work', to: '/actions' },
+        { label: 'Tenants', to: '/tenants' },
       ],
     },
     profile?.spaceAdmin && {

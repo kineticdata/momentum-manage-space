@@ -4,7 +4,6 @@ import { Icon } from '../../atoms/Icon.jsx';
 import { StatusPill } from '../tickets/StatusPill.jsx';
 import { callIfFn, timeAgo } from '../../helpers/index.js';
 import { useSelector } from 'react-redux';
-import { Button } from '../../atoms/Button.jsx';
 import useSwipe from '../../helpers/hooks/useSwipe.js';
 import { FormModal } from '../../atoms/FormModal.jsx';
 import { useState } from 'react';
@@ -101,8 +100,7 @@ export const TenantCard = ({ submission, setTenantList }) => {
         <div
           className={clsx(
             'absolute top-0 right-0.25 h-full w-24 pl-4',
-            'flex flex-col justify-center items-center gap-1',
-            'bg-warning-400 text-white rounded-r-xl',
+            'flex-c-cc gap-1 bg-error text-error-content rounded-r-box',
           )}
         >
           <Icon name="trash" />
@@ -112,22 +110,20 @@ export const TenantCard = ({ submission, setTenantList }) => {
       <div
         className={clsx(
           // Mobile first styles
-          'flex py-0.75 px-1',
+          'flex py-1.25 px-3',
           // Non mobile styles
           'md:col-start-1 md:col-end-5 md:grid md:grid-cols-[subgrid] md:py-2.75 md:px-6',
           // Common styles
-          'group relative gap-3 items-center min-h-16 rounded-xl',
-          'bg-white shadow-card border border-transparent transition',
-          'hover:border-primary-500 hover:bg-gray-100 hover:shadow-card-hover',
-          'focus-within:border-primary-500 focus-within:bg-gray-100 focus-within:shadow-card-hover',
+          'group relative gap-3 items-center min-h-16 rounded-box bg-base-100 border transition',
+          'hover:bg-base-200 focus-within:bg-base-200',
         )}
         style={{ left, right }}
       >
-        <div className="bg-primary-100 border border-primary-400 text-gray-950 rounded-xl shadow-icon flex-none p-1.25 md:p-1.75">
+        <div className="icon-box flex-none">
           <Icon
             name={icon}
             className={clsx({
-              'text-warning-400': submission.submission === null,
+              'text-warning': submission.submission === null,
             })}
           />
         </div>
@@ -140,7 +136,9 @@ export const TenantCard = ({ submission, setTenantList }) => {
             >
               {submission.label}
             </Link>
-            <div className="text-xs text-gray-900">{meta.dateString}</div>
+            <div className="text-xs text-base-content/60">
+              {meta.dateString}
+            </div>
           </div>
         ) : (
           <>
@@ -151,29 +149,31 @@ export const TenantCard = ({ submission, setTenantList }) => {
             >
               {submission.label}
             </Link>
-            <div className="text-gray-900">
+            <div className="text-base-content/60">
               {submission.submission?.values['Company Name']}
             </div>
           </>
         )}
         <div className="max-md:ml-auto flex gap-2 items-center">
           <StatusPill
-            className={clsx({
+            className={clsx('md:min-w-32 justify-end', {
               'group-hover:min-w-20 group-focus-within:min-w-20':
                 !mobile && meta.canDelete,
             })}
             status={meta.status}
           />
           {!mobile && meta.canDelete && (
-            <Button
-              variant="secondary"
-              icon="trash"
-              size="md"
+            <button
+              type="button"
               className={clsx(
+                'kbtn kbtn-soft kbtn-circle',
                 'relative -my-1 not-group-hover:not-group-focus-within:hidden',
               )}
               onClick={() => setOpenModal(true)}
-            />
+              aria-label="Decommission Tenant"
+            >
+              <Icon name="trash" />
+            </button>
           )}
         </div>
       </div>
@@ -186,7 +186,7 @@ export const TenantCard = ({ submission, setTenantList }) => {
       >
         <div slot="description" className="text-center mt-2 space-y-2">
           <div className="font-bold text-xl">Tenant Decommission</div>
-          <div className="font-semibold text-warning-500">WARNING!!!</div>
+          <div className="font-semibold text-warning">WARNING!!!</div>
           <div>
             This will completely remove the selected Kinops environment, its
             related task engine, task engine database, Filehub, and Bridgehub

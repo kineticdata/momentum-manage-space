@@ -40,6 +40,8 @@ const buildTenantsSearch = filters => {
 export const Tenants = () => {
   const { profile, kappSlug } = useSelector(state => state.app);
   const [mergedTenantData, setMergedTenantData] = useState([]);
+
+  // State for filters
   const [filters, setFilters] = useState({
     environmentTypes: [],
     status: { decommissioned: false },
@@ -57,10 +59,10 @@ export const Tenants = () => {
         : null,
     [kappSlug],
   );
-  const {
-    response: tenantForm,
-  } = useData(fetchForm, getFormParams);
 
+  const { response: tenantForm } = useData(fetchForm, getFormParams);
+
+  // Parameters for the query
   const submissionSearchParams = useMemo(
     () => ({
       kapp: kappSlug,
@@ -89,7 +91,7 @@ export const Tenants = () => {
   );
 
   const mergeTenantResponses = (submissions = [], tenantData = []) => {
-    // Mere submissions with tenant data
+    // Merge submissions with tenant data
     const merged = submissions.map(submission => {
       const spaceSlug = submission.values['Space Slug'];
       const tenant = tenantData.find(t => t.slug === spaceSlug);
@@ -112,9 +114,13 @@ export const Tenants = () => {
     );
 
     // Create a submission object for each tenant without a submission. Only do this on the first page.
-    // This ensures that we dont break of pagination.
+    // This ensures that we dont break pagination.
     const missingTenantSubmissions =
-      pageNumber === 1 && filters.status.decommissioned === false && filters.search.companyName === '' && filters.search.environmentType === '' && filters.search.spaceSlug === ''
+      pageNumber === 1 &&
+      filters.status.decommissioned === false &&
+      filters.search.companyName === '' &&
+      filters.search.environmentType === '' &&
+      filters.search.spaceSlug === ''
         ? tenantsWithoutSubmissions.map(tenant => ({
             id: tenant.slug,
             label: tenant.name,
@@ -144,14 +150,14 @@ export const Tenants = () => {
     if (!tenantForm) {
       return;
     }
-    
+
     let environmentValues = [];
 
     for (const page of tenantForm.form.pages) {
       for (const element of page.elements) {
         if (element.elements) {
           for (const subElement of element.elements) {
-            if (subElement.name === "Environment Type" && subElement.choices) {
+            if (subElement.name === 'Environment Type' && subElement.choices) {
               environmentValues = subElement.choices.map(c => c.value);
             }
           }

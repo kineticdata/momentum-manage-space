@@ -9,6 +9,7 @@ import { SettingsRouting } from './settings/index.jsx';
 import { Header } from '../components/header/Header.jsx';
 import { SearchModal } from '../components/search/SearchModal.jsx';
 import { Theme } from './theme/index.jsx';
+import { Tenants } from './tenants/tenant-requests/Tenants.jsx';
 
 const Redirect = ({ to }) => {
   const params = useParams();
@@ -58,6 +59,7 @@ export const PrivateRoutes = () => {
               {/* Portal routes */}
               <Route path="/actions/*" element={<Actions />} />
               <Route path="/requests/*" element={<Requests />} />
+              <Route path="/tenants/*" element={<Tenants />} />
               <Route
                 path="/forms/:formSlug/:submissionId?"
                 element={<Form />}

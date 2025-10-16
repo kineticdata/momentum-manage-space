@@ -30,9 +30,9 @@ export const StatusDot = ({ status }) => (
     className={clsx('kstatus shadow-sm mb-2.5', {
       'kstatus-info': status === 'Draft',
       'kstatus-success':
-        status === 'Submitted' || status === 'Open' || status === 'Success',
+        status === 'Submitted' || status === 'Open' || status === 'Success' || status === 'Active',
       'kstatus-warning': status === 'Failure',
-      'bg-base-300': status === 'Closed' || status === 'None',
+      'bg-base-300': status === 'Closed' || status === 'None' || status === 'Decommissioned',
     })}
   />
 );
