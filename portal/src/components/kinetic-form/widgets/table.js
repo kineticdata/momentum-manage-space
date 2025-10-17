@@ -507,7 +507,7 @@ const TableRenderer = ({
                     <th
                       key={column.property}
                       className={clsx(
-                        'bg-transparent text-text-content/60 px-3 py-1.5 font-normal text-sm text-left',
+                        'bg-transparent text-base-content/60 px-3 py-1.5 font-normal text-sm text-left',
                         column.footerCellClass,
                       )}
                       style={column.footerCellStyles}

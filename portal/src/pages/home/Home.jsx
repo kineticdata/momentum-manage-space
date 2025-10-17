@@ -88,12 +88,6 @@ export const Home = () => {
                   >
                     See My Work
                   </Link>
-                    <Link
-                        to="/tenants"
-                        className="kbtn kbtn-outline kbtn-base kbtn-xl flex-1"
-                    >
-                        Tenants
-                    </Link>
                 </div>
               </>
             )}

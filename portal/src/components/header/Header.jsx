@@ -163,7 +163,7 @@ const HeaderMenuItem = ({
     <li>
       {typeof onClick === 'function' ? (
         <button
-          className="content-cemter h12 text-base"
+          className="content-center h12 text-base"
           onClick={() => {
             onClick();
             close();
