@@ -1,121 +1,100 @@
-import { useSelector } from 'react-redux';
 import clsx from 'clsx';
 import { EmptyCard } from '../../../components/tickets/TicketCard.jsx';
 import { Error } from '../../../components/states/Error.jsx';
 import { Loading } from '../../../components/states/Loading.jsx';
-import { Button } from '../../../atoms/Button.jsx';
 import { TenantFilters } from '../../../components/tenants/TenantFilters.jsx';
 import { TenantCard } from '../../../components/tenants/TenantCard.jsx';
+import { PageHeading } from '../../../components/PageHeading.jsx';
+import { Icon } from '../../../atoms/Icon.jsx';
 
-export const TenantsList = ({ listData, listActions, filters, setFilters, setTenantList }) => {
-  const mobile = useSelector(state => state.view.mobile);
+export const TenantsList = ({
+  listData,
+  listActions,
+  filters,
+  setFilters,
+  setTenantList,
+}) => {
   const { initialized, error, loading, data, pageNumber } = listData;
   const { nextPage, previousPage } = listActions;
 
   return (
-    <>
-      <div
-        className={clsx(
-          // Mobile first styles
-          'my-4 flex max-xl:flex-col justify-between gap-6',
-          // Non mobile styles
-          'md:my-6 md:items-center',
-        )}
-      >
-        <TenantFilters
-          type="tenants"
-          filters={filters}
-          setFilters={setFilters}
-        ></TenantFilters>
-      </div>
+    <div className="gutter">
+      <div className="max-w-screen-lg pt-1 pb-6">
+        <PageHeading title="Tenants" backTo="/" className="flex-wrap">
+          <TenantFilters
+            type="tenants"
+            filters={filters}
+            setFilters={setFilters}
+          />
+        </PageHeading>
 
-      {initialized && (
-        <>
-          {error ? (
-            <Error error={error} />
-          ) : (
-            <div className="flex flex-col gap-4 mb-4 md:mb-6 md:grid md:grid-cols-[auto_2fr_1fr_auto]">
-              {/* Mobile previous page button */}
-              {mobile && !loading && previousPage && (
-                <Button
-                  variant="tertiary"
-                  onClick={previousPage}
-                  disabled={loading}
-                  icon="chevron-up"
-                >
-                  previous
-                </Button>
-              )}
+        {initialized && (
+          <>
+            {error ? (
+              <Error error={error} />
+            ) : (
+              <div className="flex-c-st gap-4 md:grid md:grid-cols-[auto_2fr_1fr_auto]">
+                {/* Loading indicator if we're loading and there is no data */}
+                {loading && !data && (
+                  <Loading className="col-start-1 col-end-5" />
+                )}
 
-              {/* Loading indicator if we're loading and there is no data */}
-              {loading &&
-                (mobile ? (
-                  <Loading xsmall size={36} />
-                ) : (
-                  !data && <Loading className="col-start-1 col-end-5" />
-                ))}
-
-              {/* List of data */}
-              {data?.length > 0 &&
+                {/* List of data */}
+                {data?.length > 0 &&
                   data.map(listItem => (
-                  <TenantCard
-                    key={listItem.id}
-                    submission={listItem}
-                    setTenantList={setTenantList}
-                  />
-                ))}
+                    <TenantCard
+                      key={listItem.id}
+                      submission={listItem}
+                      setTenantList={setTenantList}
+                    />
+                  ))}
 
-              {/* Empty message if we're not loading and there is no data*/}
-              {data?.length === 0 && (
-                <EmptyCard>
-                  There are no requests to show
-                  {previousPage ? ' on this page' : ''}.
-                </EmptyCard>
-              )}
+                {/* Empty message if we're not loading and there is no data*/}
+                {data?.length === 0 && (
+                  <EmptyCard>
+                    There are no tenants to show
+                    {previousPage ? ' on this page' : ''}.
+                  </EmptyCard>
+                )}
 
-              {/*Mobile next page button*/}
-              {mobile && !loading && nextPage && (
-                <Button
-                  variant="tertiary"
-                  onClick={nextPage}
-                  disabled={loading}
-                >
-                  more...
-                </Button>
-              )}
-
-              {/* Non mobile pagination UI */}
-              {!mobile && (data?.length > 0 || previousPage) && (
-                <div className="col-start-1 col-end-5 py-2.5 px-6 flex justify-center items-center gap-6 bg-white rounded-xl shadow-card min-h-16">
-                  <Button
-                    variant="secondary"
-                    onClick={previousPage}
-                    disabled={!previousPage || loading}
-                    icon="chevron-left"
+                {(data?.length > 0 || previousPage) && (
+                  <div
+                    className={clsx(
+                      'col-start-1 col-end-5 py-0.25 md:py-1.75 px-6 flex-cc gap-6',
+                      'bg-base-100 border rounded-box md:min-h-16',
+                      'max-md:sticky max-md:bottom-4 max-md:outline-2 max-md:outline-base-100',
+                    )}
                   >
-                    Previous
-                  </Button>
-                  {loading ? (
-                    <Loading xsmall size={36} />
-                  ) : (
-                    <div className="flex justify-center items-center w-11 h-11 bg-secondary-400 rounded-full font-semibold">
-                      {pageNumber}
-                    </div>
-                  )}
-                  <Button
-                    variant="secondary"
-                    onClick={nextPage}
-                    disabled={!nextPage || loading}
-                    iconEnd="chevron-right"
-                  >
-                    Next
-                  </Button>
-                </div>
-              )}
-            </div>
-          )}
-        </>
-      )}
-    </>
+                    <button
+                      type="button"
+                      className="kbtn kbtn-ghost kbtn-lg kbtn-circle"
+                      onClick={previousPage}
+                      disabled={!previousPage || loading}
+                      aria-label="Previous Page"
+                    >
+                      <Icon name="chevrons-left" />
+                    </button>
+                    {loading ? (
+                      <Loading xsmall size={36} />
+                    ) : (
+                      <div className="font-semibold">Page {pageNumber}</div>
+                    )}
+                    <button
+                      type="button"
+                      className="kbtn kbtn-ghost kbtn-lg kbtn-circle"
+                      onClick={nextPage}
+                      disabled={!nextPage || loading}
+                      aria-label="Next Page"
+                    >
+                      <Icon name="chevrons-right" />
+                    </button>
+                  </div>
+                )}
+              </div>
+            )}
+          </>
+        )}
+      </div>
+    </div>
   );
 };
