@@ -30,8 +30,8 @@ const buildTenantsSearch = filters => {
       companyName: filters.search.companyName || undefined,
       spaceSlug: filters.search.spaceSlug || undefined,
     }),
-    sortOrder: 'createdAt',
-    direction: 'asc',
+    sortOrder: filters.sortBy,
+    direction: filters.sortDirection,
     include: ['details', 'values', 'form', 'form.attributesMap'],
     limit: 10,
   };
@@ -46,6 +46,12 @@ export const Tenants = () => {
     environmentTypes: [],
     status: { decommissioned: false },
     search: { companyName: '', environmentType: '', spaceSlug: '' },
+    sortBy: 'createdAt',
+    sortDirection: 'asc',
+    visibleColumns: {
+      companyName: true,
+      environmentType: false,
+    },
   });
 
   const getFormParams = useMemo(
@@ -136,6 +142,43 @@ export const Tenants = () => {
     return [...missingTenantSubmissions, ...merged];
   };
 
+  // Sort the merged tenant data based on filters
+  const sortedTenantData = useMemo(() => {
+    if (!mergedTenantData.length) return [];
+
+    const sorted = [...mergedTenantData].sort((a, b) => {
+      let aValue, bValue;
+
+      switch (filters.sortBy) {
+        case 'label':
+          aValue = a.label || '';
+          bValue = b.label || '';
+          break;
+        case 'status':
+          aValue = a.submission?.values?.['Status'] || 'Active';
+          bValue = b.submission?.values?.['Status'] || 'Active';
+          break;
+        case 'companyName':
+          aValue = a.submission?.values?.['Company Name'] || '';
+          bValue = b.submission?.values?.['Company Name'] || '';
+          break;
+        case 'environmentType':
+          aValue = a.submission?.values?.['Environment Type'] || '';
+          bValue = b.submission?.values?.['Environment Type'] || '';
+          break;
+      }
+
+      if (typeof aValue === 'string') aValue = aValue.toLowerCase();
+      if (typeof bValue === 'string') bValue = bValue.toLowerCase();
+
+      if (aValue < bValue) return filters.sortDirection === 'asc' ? -1 : 1;
+      if (aValue > bValue) return filters.sortDirection === 'asc' ? 1 : -1;
+      return 0;
+    });
+
+    return sorted;
+  }, [mergedTenantData, filters.sortBy, filters.sortDirection]);
+
   useEffect(() => {
     if (!response?.submissions || !tenantResponse?.spaces) {
       return;
@@ -185,7 +228,7 @@ export const Tenants = () => {
             listData={{
               initialized,
               loading: tenantLoading,
-              data: mergedTenantData,
+              data: sortedTenantData,
               error: response?.error,
               pageNumber,
             }}

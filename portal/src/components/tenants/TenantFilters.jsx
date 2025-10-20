@@ -192,7 +192,7 @@ export const TenantFilters = ({ type, filters, setFilters }) => {
           </div>
 
           {tempFilters.status && (
-            <div className="px-4 pt-1 pb-3 flex-c-st gap-4">
+            <div className="px-4 pt-1 pb-3 flex-c-st gap-4 border-b border-base-300">
               <span className="font-medium">Status</span>
               <div className="flex gap-5">
                 <ChipButton
@@ -210,6 +210,44 @@ export const TenantFilters = ({ type, filters, setFilters }) => {
               </div>
             </div>
           )}
+
+          <div className="px-4 pt-1 pb-3 flex-c-st gap-4 border-b border-base-300">
+            <span className="font-medium">Additional Columns</span>
+            <div className="flex flex-col gap-3">
+              <label className="flex items-center gap-3 cursor-pointer">
+                <input
+                  type="checkbox"
+                  className="checkbox checkbox-sm"
+                  checked={tempFilters.visibleColumns?.companyName ?? true}
+                  onChange={e => {
+                    setTempFilters(f =>
+                      produce(f, draft => {
+                        if (!draft.visibleColumns) draft.visibleColumns = {};
+                        draft.visibleColumns.companyName = e.target.checked;
+                      }),
+                    );
+                  }}
+                />
+                <span>Company Name</span>
+              </label>
+              <label className="flex items-center gap-3 cursor-pointer">
+                <input
+                  type="checkbox"
+                  className="checkbox checkbox-sm"
+                  checked={tempFilters.visibleColumns?.environmentType ?? false}
+                  onChange={e => {
+                    setTempFilters(f =>
+                      produce(f, draft => {
+                        if (!draft.visibleColumns) draft.visibleColumns = {};
+                        draft.visibleColumns.environmentType = e.target.checked;
+                      }),
+                    );
+                  }}
+                />
+                <span>Environment Type</span>
+              </label>
+            </div>
+          </div>
 
           <div className="px-4 pt-1">
             <span className="font-medium">Search</span>
