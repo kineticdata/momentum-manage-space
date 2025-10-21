@@ -36,32 +36,6 @@ export const TenantFilters = ({ type, filters, setFilters }) => {
     },
     [],
   );
-  // Handler to reset all filters to false so we show all records
-  const handleTempFilterClearAll = useCallback(() => {
-    setTempFilters(f =>
-      produce(f, draft => {
-        Object.keys(draft).forEach(name => {
-          Object.keys(draft[name]).forEach(property => {
-            const value = draft[name][property];
-
-            if (typeof value === 'boolean') {
-              draft[name][property] = false;
-            } else if (typeof value === 'string') {
-              draft[name][property] = '';
-            } else if (typeof value === 'number') {
-              draft[name][property] = 0;
-            } else if (Array.isArray(value)) {
-              draft[name][property] = [];
-            } else if (value && typeof value === 'object') {
-              draft[name][property] = {};
-            } else {
-              draft[name][property] = null;
-            }
-          });
-        });
-      }),
-    );
-  }, []);
   // Handler for applying the temp filters from the popover/panel
   const handleApplyTempFilters = useCallback(() => {
     setFilters(tempFilters);
@@ -95,7 +69,7 @@ export const TenantFilters = ({ type, filters, setFilters }) => {
   const FilterComponent = mobile ? Panel : Popover;
 
   return (
-    <div className="flex-bc gap-2 md:gap-5 items-center ml-auto">
+    <div className="flex-be gap-2 md:gap-5 items-center ml-auto">
       {!hasNone && (
         <div className="flex-ec gap-2 md:gap-4 flex-wrap">
           {hasStatus && (
@@ -163,7 +137,7 @@ export const TenantFilters = ({ type, filters, setFilters }) => {
           })}
           slot="trigger"
         >
-          {hasNone && `All ${type}`}
+          {hasNone && `Active ${type}`}
           <Icon name={hasNone ? 'chevron-down' : 'filter'} />
         </button>
         <div slot="content" className="flex-c-st gap-6">
@@ -182,11 +156,15 @@ export const TenantFilters = ({ type, filters, setFilters }) => {
               <ChipButton
                 active={hasNoneTemp}
                 icon={hasNoneTemp ? 'check' : null}
-                onClick={handleTempFilterClearAll}
+                onClick={handleTempFilterChange(
+                    'status',
+                    'decommissioned',
+                    false,
+                )}
                 disabled={hasNoneTemp}
                 className="disabled:text-base-content"
               >
-                All {type}
+                Active {type}
               </ChipButton>
             </div>
           </div>
@@ -210,45 +188,6 @@ export const TenantFilters = ({ type, filters, setFilters }) => {
               </div>
             </div>
           )}
-
-          <div className="px-4 pt-1 pb-3 flex-c-st gap-4 border-b border-base-300">
-            <span className="font-medium">Additional Columns</span>
-            <div className="flex flex-col gap-3">
-              <label className="flex items-center gap-3 cursor-pointer">
-                <input
-                  type="checkbox"
-                  className="checkbox checkbox-sm"
-                  checked={tempFilters.visibleColumns?.companyName ?? true}
-                  onChange={e => {
-                    setTempFilters(f =>
-                      produce(f, draft => {
-                        if (!draft.visibleColumns) draft.visibleColumns = {};
-                        draft.visibleColumns.companyName = e.target.checked;
-                      }),
-                    );
-                  }}
-                />
-                <span>Company Name</span>
-              </label>
-              <label className="flex items-center gap-3 cursor-pointer">
-                <input
-                  type="checkbox"
-                  className="checkbox checkbox-sm"
-                  checked={tempFilters.visibleColumns?.environmentType ?? false}
-                  onChange={e => {
-                    setTempFilters(f =>
-                      produce(f, draft => {
-                        if (!draft.visibleColumns) draft.visibleColumns = {};
-                        draft.visibleColumns.environmentType = e.target.checked;
-                      }),
-                    );
-                  }}
-                />
-                <span>Environment Type</span>
-              </label>
-            </div>
-          </div>
-
           <div className="px-4 pt-1">
             <span className="font-medium">Search</span>
           </div>

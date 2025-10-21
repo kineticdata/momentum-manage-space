@@ -6,6 +6,7 @@ import { TenantFilters } from '../../../components/tenants/TenantFilters.jsx';
 import { TenantCard } from '../../../components/tenants/TenantCard.jsx';
 import { PageHeading } from '../../../components/PageHeading.jsx';
 import { Icon } from '../../../atoms/Icon.jsx';
+import {TenantColumnControl} from "../../../components/tenants/TenantColumnControl.jsx";
 
 export const TenantsList = ({
   listData,
@@ -33,8 +34,13 @@ export const TenantsList = ({
     <div className="gutter">
       <div className="max-w-screen-lg pt-1 pb-6">
         <PageHeading title="Tenants" backTo="/" className="flex-wrap">
+          <div className="flex-1"></div>
           <TenantFilters
             type="tenants"
+            filters={filters}
+            setFilters={setFilters}
+          />
+          <TenantColumnControl
             filters={filters}
             setFilters={setFilters}
           />
@@ -106,7 +112,6 @@ export const TenantsList = ({
                         )}
                       </button>
                     )}
-
                     <button
                       type="button"
                       className="flex-ee gap-4 hover:text-base-content transition md:col-start-5 pr-5"

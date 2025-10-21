@@ -21,6 +21,7 @@ export const Popover = ({
   onOpenChange,
   position,
   alignment,
+  width = 'w-[30rem]',
   children,
 }) => {
   const slots = getChildSlots(children, {
@@ -41,7 +42,9 @@ export const Popover = ({
         <ArkPopover.Trigger asChild>{slots.trigger}</ArkPopover.Trigger>
       )}
       <ArkPopover.Positioner>
-        <ArkPopover.Content className="relative p-6 bg-base-100 rounded-box shadow-2xl w-[30rem] max-w-[calc(100vw-2rem)] z-30">
+        <ArkPopover.Content
+          className={`relative p-6 bg-base-100 rounded-box shadow-2xl ${width} max-w-[calc(100vw-2rem)] z-30`}
+        >
           {slots.content}
         </ArkPopover.Content>
       </ArkPopover.Positioner>
