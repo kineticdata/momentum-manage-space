@@ -18,14 +18,14 @@ export const TenantsList = ({
   const { initialized, error, loading, data, pageNumber } = listData;
   const { nextPage, previousPage } = listActions;
 
-  const orderBy = field => {
+  const handleSort = field => {
     const newDirection =
-      filters.sortBy === field && filters.sortDirection === 'asc'
+      filters.orderBy === field && filters.sortDirection === 'asc'
         ? 'desc'
         : 'asc';
     setFilters(f => ({
       ...f,
-      sortBy: field,
+      orderBy: field,
       sortDirection: newDirection,
     }));
   };
@@ -58,10 +58,10 @@ export const TenantsList = ({
                     <button
                       type="button"
                       className="flex-ss gap-2 hover:text-base-content transition"
-                      onClick={() => orderBy('values[Space Slug]')}
+                      onClick={() => handleSort('values[Space Slug]')}
                     >
                       Slug Name
-                      {filters.sortBy === 'values[Space Slug]' && (
+                      {filters.orderBy === 'values[Space Slug]' && (
                         <Icon
                           name={
                             filters.sortDirection === 'asc'
@@ -76,10 +76,10 @@ export const TenantsList = ({
                       <button
                         type="button"
                         className="flex-ss gap-2 hover:text-base-content transition"
-                        onClick={() => orderBy('values[Company Name]')}
+                        onClick={() => handleSort('values[Company Name]')}
                       >
                         Company Name
-                        {filters.sortBy === 'values[Company Name]' && (
+                        {filters.orderBy === 'values[Company Name]' && (
                           <Icon
                             name={
                               filters.sortDirection === 'asc'
@@ -95,10 +95,10 @@ export const TenantsList = ({
                       <button
                         type="button"
                         className="flex-ss gap-2 hover:text-base-content transition"
-                        onClick={() => orderBy('values[Environment Type]')}
+                        onClick={() => handleSort('values[Environment Type]')}
                       >
                         Environment Type
-                        {filters.sortBy === 'values[Environment Type]' && (
+                        {filters.orderBy === 'values[Environment Type]' && (
                           <Icon
                             name={
                               filters.sortDirection === 'asc'

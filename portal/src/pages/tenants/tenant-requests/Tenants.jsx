@@ -30,7 +30,7 @@ const buildTenantsSearch = filters => {
       companyName: filters.search.companyName || undefined,
       spaceSlug: filters.search.spaceSlug || undefined,
     }),
-    orderBy: filters.sortBy,
+    orderBy: filters.orderBy,
     direction: filters.sortDirection,
     include: ['details', 'values', 'form', 'form.attributesMap'],
     limit: 10,
@@ -46,7 +46,7 @@ export const Tenants = () => {
     environmentTypes: [],
     status: { decommissioned: false },
     search: { companyName: '', environmentType: '', spaceSlug: '' },
-    sortBy: 'createdAt',
+    orderBy: 'createdAt',
     sortDirection: 'asc',
     visibleColumns: {
       companyName: true,

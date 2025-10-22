@@ -1,6 +1,5 @@
 import { useSelector } from 'react-redux';
 import { useCallback, useState } from 'react';
-import { produce } from 'immer';
 import { Panel } from '../../atoms/Panel.jsx';
 import { Popover } from '../../atoms/Popover.jsx';
 import t from 'prop-types';
@@ -52,12 +51,13 @@ export const TenantColumnControl = ({ filters, setFilters }) => {
                   type="checkbox"
                   checked={filters.visibleColumns?.companyName ?? true}
                   onChange={e => {
-                    setFilters(f =>
-                      produce(f, draft => {
-                        if (!draft.visibleColumns) draft.visibleColumns = {};
-                        draft.visibleColumns.companyName = e.target.checked;
-                      }),
-                    );
+                    setFilters(filter => ({
+                      ...filter,
+                      visibleColumns: {
+                        ...filter.visibleColumns,
+                        companyName: e.target.checked,
+                      },
+                    }));
                   }}
                 />
                 <span>Company Name</span>
@@ -67,12 +67,13 @@ export const TenantColumnControl = ({ filters, setFilters }) => {
                   type="checkbox"
                   checked={filters.visibleColumns?.environmentType ?? false}
                   onChange={e => {
-                    setFilters(f =>
-                      produce(f, draft => {
-                        if (!draft.visibleColumns) draft.visibleColumns = {};
-                        draft.visibleColumns.environmentType = e.target.checked;
-                      }),
-                    );
+                    setFilters(filter => ({
+                      ...filter,
+                      visibleColumns: {
+                        ...filter.visibleColumns,
+                        environmentType: e.target.checked,
+                      },
+                    }));
                   }}
                 />
                 <span>Environment Type</span>
