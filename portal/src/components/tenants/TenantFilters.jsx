@@ -69,7 +69,7 @@ export const TenantFilters = ({ type, filters, setFilters }) => {
   const FilterComponent = mobile ? Panel : Popover;
 
   return (
-    <div className="flex-be gap-2 md:gap-5 items-center ml-auto">
+    <div className="flex-bc gap-2 md:gap-5 items-center ml-auto">
       {!hasNone && (
         <div className="flex-ec gap-2 md:gap-4 flex-wrap">
           {hasStatus && (

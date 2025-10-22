@@ -18,7 +18,7 @@ export const TenantsList = ({
   const { initialized, error, loading, data, pageNumber } = listData;
   const { nextPage, previousPage } = listActions;
 
-  const handleSort = field => {
+  const orderBy = field => {
     const newDirection =
       filters.sortBy === field && filters.sortDirection === 'asc'
         ? 'desc'
@@ -40,10 +40,7 @@ export const TenantsList = ({
             filters={filters}
             setFilters={setFilters}
           />
-          <TenantColumnControl
-            filters={filters}
-            setFilters={setFilters}
-          />
+          <TenantColumnControl filters={filters} setFilters={setFilters} />
         </PageHeading>
 
         {initialized && (
@@ -56,14 +53,15 @@ export const TenantsList = ({
                 <div className="flex-c-st gap-4 md:grid md:grid-cols-[auto_2fr_1fr_1fr_auto]">
                   {/* Header Row - Desktop only */}
                   <div className="max-md:hidden col-start-1 col-end-6 grid grid-cols-[subgrid] px-6 py-2 gap-3 items-center font-semibold text-sm text-base-content/60">
-                    <div></div> {/* Icon column */}
+                    <div></div>
+                    {/* Icon column */}
                     <button
                       type="button"
                       className="flex-ss gap-2 hover:text-base-content transition"
-                      onClick={() => handleSort('label')}
+                      onClick={() => orderBy('values[Space Slug]')}
                     >
                       Slug Name
-                      {filters.sortBy === 'label' && (
+                      {filters.sortBy === 'values[Space Slug]' && (
                         <Icon
                           name={
                             filters.sortDirection === 'asc'
@@ -78,10 +76,10 @@ export const TenantsList = ({
                       <button
                         type="button"
                         className="flex-ss gap-2 hover:text-base-content transition"
-                        onClick={() => handleSort('companyName')}
+                        onClick={() => orderBy('values[Company Name]')}
                       >
                         Company Name
-                        {filters.sortBy === 'companyName' && (
+                        {filters.sortBy === 'values[Company Name]' && (
                           <Icon
                             name={
                               filters.sortDirection === 'asc'
@@ -97,10 +95,10 @@ export const TenantsList = ({
                       <button
                         type="button"
                         className="flex-ss gap-2 hover:text-base-content transition"
-                        onClick={() => handleSort('environmentType')}
+                        onClick={() => orderBy('values[Environment Type]')}
                       >
                         Environment Type
-                        {filters.sortBy === 'environmentType' && (
+                        {filters.sortBy === 'values[Environment Type]' && (
                           <Icon
                             name={
                               filters.sortDirection === 'asc'
