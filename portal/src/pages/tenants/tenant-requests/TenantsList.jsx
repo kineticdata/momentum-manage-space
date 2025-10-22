@@ -49,15 +49,11 @@ export const TenantsList = ({
               <Error error={error} />
             ) : (
               <div className="flex-c-st gap-4">
-                {/* Grid Container */}
                 <div className="flex-c-st gap-4 md:grid md:grid-cols-[auto_2fr_1fr_1fr_auto]">
-                  {/* Header Row - Desktop only */}
                   <div className="max-md:hidden col-start-1 col-end-6 grid grid-cols-[subgrid] px-6 py-2 gap-3 items-center font-semibold text-sm text-base-content/60">
-                    <div></div>
-                    {/* Icon column */}
                     <button
                       type="button"
-                      className="flex-ss gap-2 hover:text-base-content transition"
+                      className="flex-ss gap-2 hover:text-base-content transition md:col-start-2"
                       onClick={() => handleSort('values[Space Slug]')}
                     >
                       Slug Name
