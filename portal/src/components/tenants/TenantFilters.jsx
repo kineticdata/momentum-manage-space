@@ -157,9 +157,9 @@ export const TenantFilters = ({ type, filters, setFilters }) => {
                 active={hasNoneTemp}
                 icon={hasNoneTemp ? 'check' : null}
                 onClick={handleTempFilterChange(
-                    'status',
-                    'decommissioned',
-                    false,
+                  'status',
+                  'decommissioned',
+                  false,
                 )}
                 disabled={hasNoneTemp}
                 className="disabled:text-base-content"

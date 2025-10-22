@@ -6,7 +6,7 @@ import { TenantFilters } from '../../../components/tenants/TenantFilters.jsx';
 import { TenantCard } from '../../../components/tenants/TenantCard.jsx';
 import { PageHeading } from '../../../components/PageHeading.jsx';
 import { Icon } from '../../../atoms/Icon.jsx';
-import {TenantColumnControl} from "../../../components/tenants/TenantColumnControl.jsx";
+import { TenantColumnControl } from '../../../components/tenants/TenantColumnControl.jsx';
 
 export const TenantsList = ({
   listData,
