@@ -16,7 +16,7 @@ export const TenantColumnControl = ({ filters, setFilters }) => {
       setFilters(filters);
       setOpen(open);
     },
-    [filters],
+    [filters, setFilters],
   );
 
   // Select a component to use for showing the filters based on the screen size
