@@ -62,7 +62,11 @@ const getToPath = submission => {
   return submission.id;
 };
 
-export const TenantCard = ({ submission, setTenantList }) => {
+export const TenantCard = ({
+  submission,
+  setTenantList,
+  visibleColumns = {},
+}) => {
   const mobile = useSelector(state => state.view.mobile);
   const location = useLocation();
   const [openModal, setOpenModal] = useState(false);
@@ -88,7 +92,7 @@ export const TenantCard = ({ submission, setTenantList }) => {
     <div
       className={clsx(
         // Non mobile styles
-        'md:col-start-1 md:col-end-5 md:grid md:grid-cols-[subgrid]',
+        'md:col-start-1 md:col-end-6 md:grid md:grid-cols-[subgrid]',
         // Common styles
         'group relative',
       )}
@@ -112,7 +116,7 @@ export const TenantCard = ({ submission, setTenantList }) => {
           // Mobile first styles
           'flex py-1.25 px-3',
           // Non mobile styles
-          'md:col-start-1 md:col-end-5 md:grid md:grid-cols-[subgrid] md:py-2.75 md:px-6',
+          'md:col-start-1 md:col-end-6 md:grid md:grid-cols-[subgrid] md:py-2.75 md:px-6',
           // Common styles
           'group relative gap-3 items-center min-h-16 rounded-box bg-base-100 border transition',
           'hover:bg-base-200 focus-within:bg-base-200',
@@ -149,12 +153,21 @@ export const TenantCard = ({ submission, setTenantList }) => {
             >
               {submission.label}
             </Link>
-            <div className="text-base-content/60">
-              {submission.submission?.values['Company Name']}
-            </div>
+
+            {visibleColumns.companyName && (
+              <div className="text-base-content/60">
+                {submission.submission?.values?.['Company Name'] || 'N/A'}
+              </div>
+            )}
+
+            {visibleColumns.environmentType && (
+              <div className="text-base-content/60">
+                {submission.submission?.values?.['Environment Type'] || 'N/A'}
+              </div>
+            )}
           </>
         )}
-        <div className="max-md:ml-auto flex gap-2 items-center">
+        <div className="max-md:ml-auto flex gap-2 items-center md:col-start-5">
           <StatusPill
             className={clsx('md:min-w-32 justify-end', {
               'group-hover:min-w-20 group-focus-within:min-w-20':

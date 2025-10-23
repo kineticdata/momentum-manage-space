@@ -30,8 +30,8 @@ const buildTenantsSearch = filters => {
       companyName: filters.search.companyName || undefined,
       spaceSlug: filters.search.spaceSlug || undefined,
     }),
-    sortOrder: 'createdAt',
-    direction: 'asc',
+    orderBy: filters.orderBy,
+    direction: filters.sortDirection,
     include: ['details', 'values', 'form', 'form.attributesMap'],
     limit: 10,
   };
@@ -46,6 +46,12 @@ export const Tenants = () => {
     environmentTypes: [],
     status: { decommissioned: false },
     search: { companyName: '', environmentType: '', spaceSlug: '' },
+    orderBy: 'createdAt',
+    sortDirection: 'asc',
+    visibleColumns: {
+      companyName: true,
+      environmentType: false,
+    },
   });
 
   const getFormParams = useMemo(

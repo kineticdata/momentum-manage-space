@@ -36,32 +36,6 @@ export const TenantFilters = ({ type, filters, setFilters }) => {
     },
     [],
   );
-  // Handler to reset all filters to false so we show all records
-  const handleTempFilterClearAll = useCallback(() => {
-    setTempFilters(f =>
-      produce(f, draft => {
-        Object.keys(draft).forEach(name => {
-          Object.keys(draft[name]).forEach(property => {
-            const value = draft[name][property];
-
-            if (typeof value === 'boolean') {
-              draft[name][property] = false;
-            } else if (typeof value === 'string') {
-              draft[name][property] = '';
-            } else if (typeof value === 'number') {
-              draft[name][property] = 0;
-            } else if (Array.isArray(value)) {
-              draft[name][property] = [];
-            } else if (value && typeof value === 'object') {
-              draft[name][property] = {};
-            } else {
-              draft[name][property] = null;
-            }
-          });
-        });
-      }),
-    );
-  }, []);
   // Handler for applying the temp filters from the popover/panel
   const handleApplyTempFilters = useCallback(() => {
     setFilters(tempFilters);
@@ -163,7 +137,7 @@ export const TenantFilters = ({ type, filters, setFilters }) => {
           })}
           slot="trigger"
         >
-          {hasNone && `All ${type}`}
+          {hasNone && `Active ${type}`}
           <Icon name={hasNone ? 'chevron-down' : 'filter'} />
         </button>
         <div slot="content" className="flex-c-st gap-6">
@@ -182,17 +156,21 @@ export const TenantFilters = ({ type, filters, setFilters }) => {
               <ChipButton
                 active={hasNoneTemp}
                 icon={hasNoneTemp ? 'check' : null}
-                onClick={handleTempFilterClearAll}
+                onClick={handleTempFilterChange(
+                  'status',
+                  'decommissioned',
+                  false,
+                )}
                 disabled={hasNoneTemp}
                 className="disabled:text-base-content"
               >
-                All {type}
+                Active {type}
               </ChipButton>
             </div>
           </div>
 
           {tempFilters.status && (
-            <div className="px-4 pt-1 pb-3 flex-c-st gap-4">
+            <div className="px-4 pt-1 pb-3 flex-c-st gap-4 border-b border-base-300">
               <span className="font-medium">Status</span>
               <div className="flex gap-5">
                 <ChipButton
@@ -210,7 +188,6 @@ export const TenantFilters = ({ type, filters, setFilters }) => {
               </div>
             </div>
           )}
-
           <div className="px-4 pt-1">
             <span className="font-medium">Search</span>
           </div>
